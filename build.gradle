@@ -1,0 +1,60 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext {
+        appcompat_version = '1.1.0'
+        kotlin_version = '1.3.72'
+        kotlin_ktx_version = '1.3.0'
+        kotlinx_coroutines_version = '1.3.0'
+        junit_version = '4.13'
+        junitx_version = '1.1.0'
+        espresso_version = '3.2.0'
+        dagger2_version = '2.23.2'
+        gson = '2.8.2'
+        retrofit_version = '2.6.0'
+        retrofit_logging_version = '3.12.1'
+        retrofit_adapter_rxjava_version = '2.4.0'
+        retrofit_json_converter_version = '2.6.0'
+        glide_version = '4.11.0'
+        // Common libs
+        libs = [
+                appcompat            : ('androidx.appcompat:appcompat:' + appcompat_version),
+                kotlin               : ('org.jetbrains.kotlin:kotlin-stdlib:' + kotlin_version),
+                ktx                  : ('androidx.core:core-ktx:' + kotlin_ktx_version),
+                kotlinx              : ('org.jetbrains.kotlinx:kotlinx-coroutines-android:' + kotlinx_coroutines_version),
+                junit                : ('junit:junit:' + junit_version),
+                junitx               : ('androidx.test.ext:junit:' + junitx_version),
+                espresso             : ('androidx.test.espresso:espresso-core:' + espresso_version),
+                dagger2              : ('com.google.dagger:dagger-android:' + dagger2_version),
+                daggerCompiler       : ('com.google.dagger:dagger-compiler:' + dagger2_version),
+                daggerAnnotation     : ('com.google.dagger:dagger-android-processor:' + dagger2_version),
+                gson                 : ('com.google.code.gson:gson:' + gson),
+                retrofit             : ('com.squareup.retrofit2:retrofit:' + retrofit_version),
+                retrofitLogging      : ('com.squareup.okhttp3:logging-interceptor:' + retrofit_logging_version),
+                retrofitJsonConverter: ('com.squareup.retrofit2:converter-gson:' + retrofit_json_converter_version),
+                glide                : ('com.github.bumptech.glide:glide:' + glide_version)
+        ]
+    }
+
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.0.0"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
