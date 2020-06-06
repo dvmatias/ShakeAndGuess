@@ -39,6 +39,8 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':core')
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     // App compat
@@ -50,5 +52,6 @@ dependencies {
     implementation libs.junit
     implementation libs.junitx
     implementation libs.espresso
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 }
