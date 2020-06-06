@@ -43,8 +43,6 @@ dependencies {
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    // App compat
-    implementation libs.appcompat
     // Testing
     implementation libs.junit
     implementation libs.junitx
