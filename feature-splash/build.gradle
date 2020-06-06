@@ -39,21 +39,14 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':core')
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    // Constraint - API: to provide dependency to each client module
-    api libs.constraintlayout
-    // Navigation - API: to provide dependency to each client module
-    api libs.navigationFragment
-    api libs.navigationUi
-    // App compat - API: to provide dependency to each client module
-    api libs.appcompat
-    // Kotlin - API: to provide dependency to each client module
-    api libs.kotlin
-    api libs.ktx
     // Testing
     implementation libs.junit
     implementation libs.junitx
     implementation libs.espresso
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
 }
