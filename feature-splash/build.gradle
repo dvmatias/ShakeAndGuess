@@ -45,9 +45,6 @@ dependencies {
 
     // App compat
     implementation libs.appcompat
-    // Kotlin
-    implementation libs.kotlin
-    implementation libs.ktx
     // Testing
     implementation libs.junit
     implementation libs.junitx

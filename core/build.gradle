@@ -41,11 +41,13 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    // Constraint - API: to provide dependency to each client module
+    api 'androidx.constraintlayout:constraintlayout:2.0.0-beta6'
     // App compat
     implementation libs.appcompat
-    // Kotlin
-    implementation libs.kotlin
-    implementation libs.ktx
+    // Kotlin - API: to provide dependency to each client module
+    api libs.kotlin
+    api libs.ktx
     // Testing
     implementation libs.junit
     implementation libs.junitx
