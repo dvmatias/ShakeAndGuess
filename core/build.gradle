@@ -41,16 +41,23 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    // Material - API: to provide dependency to each client module
+    api libs.material
     // Constraint - API: to provide dependency to each client module
     api libs.constraintlayout
     // Navigation - API: to provide dependency to each client module
     api libs.navigationFragment
     api libs.navigationUi
+    api libs.navigationFragmentX
+    api libs.navigationUiX
     // App compat - API: to provide dependency to each client module
     api libs.appcompat
     // Kotlin - API: to provide dependency to each client module
     api libs.kotlin
     api libs.ktx
+    // View Model - API: to provide dependency to each client module
+    api libs.viewmodel
+    api libs.extensions
     // Testing
     implementation libs.junit
     implementation libs.junitx
