@@ -43,8 +43,10 @@ dependencies {
 
     // Constraint - API: to provide dependency to each client module
     api libs.constraintlayout
-
-    // App compat
+    // Navigation - API: to provide dependency to each client module
+    api libs.navigationFragment
+    api libs.navigationUi
+    // App compat - API: to provide dependency to each client module
     api libs.appcompat
     // Kotlin - API: to provide dependency to each client module
     api libs.kotlin
