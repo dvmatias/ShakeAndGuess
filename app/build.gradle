@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':feature-splash')
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     // App compat
