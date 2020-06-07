@@ -13,7 +13,7 @@
 		<activity
 			android:name="com.cmdv.feature.SplashActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:theme="@style/SplashActivityThemeNoStatusBar">
+			android:theme="@style/SplashActivityTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
