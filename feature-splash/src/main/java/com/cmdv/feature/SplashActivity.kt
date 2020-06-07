@@ -7,15 +7,22 @@ import android.os.Handler
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-
+import com.cmdv.feature.databinding.ActivitySplashBinding
 
 class SplashActivity : AppCompatActivity() {
+
+	private lateinit var binding: ActivitySplashBinding
+
+	private lateinit var viewModel: SplashActivityViewModel
 
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_splash)
+		binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
+		viewModel = ViewModelProvider(this).get(SplashActivityViewModel::class.java)
 
 		applyImmersiveFullScreen()
 	}
@@ -32,7 +39,6 @@ class SplashActivity : AppCompatActivity() {
 				or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 				or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 				or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-				or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 				or View.SYSTEM_UI_FLAG_FULLSCREEN)
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

@@ -2,6 +2,6 @@ package com.cmdv.feature
 
 import androidx.lifecycle.ViewModel
 
-class SplashFragmentViewModel : ViewModel() {
+class SplashActivityViewModel : ViewModel() {
 	// TODO: Implement the ViewModel
 }
