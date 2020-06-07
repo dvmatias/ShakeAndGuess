@@ -7,10 +7,15 @@ import android.view.View
 import android.view.WindowManager
 
 fun Activity.applyImmersiveFullScreenWithNavigationBar() {
+	clearWindowSystemUiVisibilityChangeListener()
 	hideSystemUI(this)
 	window.decorView.setOnSystemUiVisibilityChangeListener {
 		checkSystemUiVisibilityFullScreen(it, this)
 	}
+}
+
+private fun Activity.clearWindowSystemUiVisibilityChangeListener() {
+	window.decorView.setOnSystemUiVisibilityChangeListener { }
 }
 
 private fun hideSystemUI(activity: Activity) {
@@ -32,4 +37,12 @@ private fun checkSystemUiVisibilityFullScreen(visibility: Int, activity: Activit
 				activity.applyImmersiveFullScreenWithNavigationBar()
 			}, 0
 		)
+}
+
+fun Activity.applyFullScreen() {
+	clearWindowSystemUiVisibilityChangeListener()
+	window.decorView.systemUiVisibility = (
+			View.SYSTEM_UI_FLAG_IMMERSIVE or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+					View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+
 }

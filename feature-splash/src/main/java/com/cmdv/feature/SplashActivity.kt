@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.cmdv.core.base.BaseMVVMActivity
+import com.cmdv.core.extensions.applyFullScreen
 import com.cmdv.core.extensions.applyImmersiveFullScreenWithNavigationBar
 import com.cmdv.feature.databinding.ActivitySplashBinding
 
@@ -29,6 +30,7 @@ class SplashActivity : BaseMVVMActivity<ActivitySplashBinding>() {
 		viewModel.destinationId.observe(this, Observer { singleEvent ->
 			singleEvent.getContentIfNotHandledOrNull()?.let {
 				navController?.navigate(it)
+				applyFullScreen()
 			}
 		})
 
