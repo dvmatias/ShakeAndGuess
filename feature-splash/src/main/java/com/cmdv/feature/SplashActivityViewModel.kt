@@ -2,7 +2,7 @@ package com.cmdv.feature
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.cmdv.core.base.SingleEvent
+import com.cmdv.core.SingleEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

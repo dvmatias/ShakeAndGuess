@@ -11,8 +11,10 @@ import androidx.navigation.Navigation
 abstract class BaseMVVMActivity<B : ViewDataBinding> : AppCompatActivity() {
 
 	protected lateinit var binding: B
+		private set
 
 	protected var navController: NavController? = null
+		private set
 
 	protected abstract fun getLayoutId(): Int
 

@@ -1,4 +1,4 @@
-package com.cmdv.core.base
+package com.cmdv.core
 
 open class SingleEvent<out T>(private val content: T) {
 
