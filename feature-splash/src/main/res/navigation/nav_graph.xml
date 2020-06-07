@@ -9,5 +9,14 @@
 		android:id="@+id/splashFragment"
 		android:name="com.cmdv.feature.fragments.SplashFragment"
 		android:label="splash_fragment"
-		tools:layout="@layout/splash_fragment" />
+		tools:layout="@layout/splash_fragment" >
+		<action
+			android:id="@+id/action_splashFragment_to_authenticationFragment"
+			app:destination="@id/authenticationFragment" />
+	</fragment>
+	<fragment
+		android:id="@+id/authenticationFragment"
+		android:name="com.cmdv.feature.fragments.AuthenticationFragment"
+		android:label="fragment_authentication"
+		tools:layout="@layout/fragment_authentication" />
 </navigation>
