@@ -1,13 +1,13 @@
 package com.cmdv.screen
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.cmdv.core.SingleEvent
+import com.cmdv.core.base.BaseMVVMViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class SplashActivityViewModel : ViewModel() {
+class SplashActivityViewModel : BaseMVVMViewModel() {
 	var destinationId = MutableLiveData<SingleEvent<Int?>>()
 
 	fun getDestination() {

@@ -54,4 +54,7 @@ dependencies {
     implementation libs.espresso
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
+    // Firebase UI - Auth
+    implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
+
 }
