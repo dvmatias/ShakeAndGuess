@@ -1,24 +1,25 @@
-package com.cmdv.feature.fragments
+package com.cmdv.screen.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.cmdv.feature.R
-import com.cmdv.feature.SplashActivityViewModel
+import com.cmdv.screen.R
 
-class SplashFragment : Fragment() {
+class AuthenticationFragment : Fragment() {
 
 	companion object {
-		fun newInstance() = SplashFragment()
+		fun newInstance() = AuthenticationFragment()
 	}
+
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		return inflater.inflate(R.layout.splash_fragment, container, false)
+		// Inflate the layout for this fragment
+		return inflater.inflate(R.layout.fragment_authentication, container, false)
 	}
 
 	override fun onActivityCreated(savedInstanceState: Bundle?) {

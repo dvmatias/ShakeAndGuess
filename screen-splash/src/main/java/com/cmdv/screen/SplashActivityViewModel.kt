@@ -1,4 +1,4 @@
-package com.cmdv.feature
+package com.cmdv.screen
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

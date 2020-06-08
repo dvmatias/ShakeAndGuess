@@ -1,4 +1,4 @@
-package com.cmdv.feature
+package com.cmdv.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import com.cmdv.core.base.BaseMVVMActivity
 import com.cmdv.core.extensions.applyFullScreen
 import com.cmdv.core.extensions.applyImmersiveFullScreenWithNavigationBar
-import com.cmdv.feature.databinding.ActivitySplashBinding
+import com.cmdv.screen.databinding.ActivitySplashBinding
 
 class SplashActivity : BaseMVVMActivity<ActivitySplashBinding>() {
 

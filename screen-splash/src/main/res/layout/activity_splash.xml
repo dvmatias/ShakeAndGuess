@@ -6,7 +6,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:background="#0099cc"
-		tools:context="com.cmdv.feature.SplashActivity">
+		tools:context="com.cmdv.screen.SplashActivity">
 
 		<fragment
 			android:id="@+id/nav_host_fragment"

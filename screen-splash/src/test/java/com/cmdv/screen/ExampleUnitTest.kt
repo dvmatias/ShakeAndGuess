@@ -1,4 +1,4 @@
-package com.cmdv.feature
+package com.cmdv.screen
 
 import org.junit.Test
 

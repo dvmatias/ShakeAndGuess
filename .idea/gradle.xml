@@ -16,7 +16,7 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/feature-splash" />
+            <option value="$PROJECT_DIR$/screen-splash" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
