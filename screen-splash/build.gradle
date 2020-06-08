@@ -38,8 +38,8 @@ android {
     }
     flavorDimensions('environment')
 
-    dataBinding{
-        enabled = true
+    buildFeatures{
+        dataBinding = true
     }
 }
 

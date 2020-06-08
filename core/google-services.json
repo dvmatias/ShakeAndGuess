@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1045184342056",
+    "firebase_url": "https://shakeandguess-55e57.firebaseio.com",
+    "project_id": "shakeandguess-55e57",
+    "storage_bucket": "shakeandguess-55e57.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1045184342056:android:94222492a27817a12d6d1d",
+        "android_client_info": {
+          "package_name": "com.cmdv.shakeandguess.qa.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1045184342056-vkb0dd42tn5ij26jrrid1q1djqpbctpo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4YxCdUWj1FKMHwash7n3ScCAFv1nGAkg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1045184342056-vkb0dd42tn5ij26jrrid1q1djqpbctpo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
