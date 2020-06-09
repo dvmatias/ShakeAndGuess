@@ -38,12 +38,15 @@ android {
     }
     flavorDimensions('environment')
 
-    dataBinding{
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 }
 
 dependencies {
+    api project(path: ':data')
+    api project(path: ':domain')
+
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
     // Material - API: to provide dependency to each client module
