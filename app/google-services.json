@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1045184342056-a3qvjiqc5i70s4sl3gmghta5do9rfdqh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cmdv.shakeandguess.qa.debug",
+            "certificate_hash": "aa1899b80cd943f43418b7f8b0a5dc69aafa537e"
+          }
+        },
+        {
           "client_id": "1045184342056-vkb0dd42tn5ij26jrrid1q1djqpbctpo.apps.googleusercontent.com",
           "client_type": 3
         }

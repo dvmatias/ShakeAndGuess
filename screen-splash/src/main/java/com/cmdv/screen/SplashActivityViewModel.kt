@@ -1,31 +1,23 @@
 package com.cmdv.screen
 
 import androidx.lifecycle.MutableLiveData
-import com.cmdv.core.SingleEvent
 import com.cmdv.core.base.BaseMVVMViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.cmdv.domain.model.UserModel
+import com.cmdv.domain.repository.SplashRepository
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.tasks.Task
 
-class SplashActivityViewModel : BaseMVVMViewModel() {
-	var destinationId = MutableLiveData<SingleEvent<Int?>>()
+class SplashActivityViewModel(private val splashRepository: SplashRepository) : BaseMVVMViewModel() {
+	var googleSinInTask = MutableLiveData<Task<GoogleSignInAccount>>()
+	var isUserAuthenticatedLiveData = MutableLiveData<UserModel>()
+	var userLiveData = MutableLiveData<UserModel>()
 
-	fun getDestination() {
-		GlobalScope.launch(Dispatchers.IO) {
-			Thread.sleep(5000)
-
-			GlobalScope.launch(Dispatchers.Main) {
-				destinationId.value =
-				when (checkIfUserIsLoggedIn()) {
-					true -> SingleEvent(null)
-					false -> SingleEvent(R.id.action_splashFragment_to_authenticationFragment)
-				}
-			}
-		}
+	fun checkIfUserIsAuthenticated() {
+		isUserAuthenticatedLiveData = splashRepository.checkIfUserIsAuthenticatedInFirebase()
 	}
 
-	private fun checkIfUserIsLoggedIn(): Boolean {
-		return false
+	fun setUid(uid: String) {
+		userLiveData = splashRepository.addUserToLiveData(uid)
 	}
 
 }

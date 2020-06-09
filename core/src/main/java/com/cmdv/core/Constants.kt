@@ -3,7 +3,7 @@ package com.cmdv.core
 class Constants {
 
 	companion object {
-		const val RC_SIGN_IN = 123
+		const val RC_GOOGLE_SIGN_IN = 123
 	}
 
 }

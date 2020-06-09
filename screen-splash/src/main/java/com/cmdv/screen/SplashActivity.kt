@@ -7,23 +7,19 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
-import androidx.navigation.findNavController
+import androidx.lifecycle.ViewModelProvider
 import com.cmdv.core.Constants
 import com.cmdv.core.base.BaseMVVMActivity
 import com.cmdv.core.extensions.applyFullScreen
 import com.cmdv.core.extensions.applyImmersiveFullScreenWithNavigationBar
+import com.cmdv.data.repository.SplashRepositoryImpl
 import com.cmdv.screen.databinding.ActivitySplashBinding
-import com.cmdv.screen.fragments.SplashActivityViewModelFactory
-import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserInfo
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+
 
 class SplashActivity : BaseMVVMActivity<ActivitySplashBinding, SplashActivityViewModel, SplashActivityViewModelFactory>() {
 
-	private lateinit var firebaseAuth: FirebaseAuth
-
-	private var authStateListener: FirebaseAuth.AuthStateListener? = null
+	private lateinit var viewModel: SplashActivityViewModel
 
 	override fun getLayoutId(): Int = R.layout.activity_splash
 
@@ -34,75 +30,49 @@ class SplashActivity : BaseMVVMActivity<ActivitySplashBinding, SplashActivityVie
 		super.onCreate(savedInstanceState)
 		applyImmersiveFullScreenWithNavigationBar()
 
-		viewModel.getDestination()
-		viewModel.destinationId.observe(this, Observer { singleEvent ->
-			singleEvent.getContentIfNotHandledOrNull()?.let {
-				navController?.navigate(it)
-				applyFullScreen()
+		setupViewModel()
+		checkIfUserIsAuthenticated()
+	}
+
+	private fun setupViewModel() {
+		viewModel = ViewModelProvider(this, SplashActivityViewModelFactory(SplashRepositoryImpl())).get(SplashActivityViewModel::class.java)
+	}
+
+	private fun checkIfUserIsAuthenticated() {
+		viewModel.checkIfUserIsAuthenticated()
+		viewModel.isUserAuthenticatedLiveData.observe(this, Observer { user ->
+			if (user.isAuthenticated) {
+				viewModel.userLiveData.observe(this, Observer {
+					Log.d(SplashActivity::class.java.simpleName, "Go to Main Activity! - User $user")
+					// TODO goToMainActivity(it)
+				})
+				getUserFromDataBase(user.uid)
+				finish()
+			} else {
+				goToAuthenticationFragment()
 			}
 		})
-
-		firebaseAuth = FirebaseAuth.getInstance()
-		authStateListener = FirebaseAuth.AuthStateListener {
-			// This block will execute when user's authentication status changes.
-			val user: FirebaseUser? = firebaseAuth.currentUser
-			if (user != null) {
-				// TODO go to main activity
-				AuthUI.getInstance().signOut(this)
-			} else {
-				// Init authentication providers
-				startActivityForResult(
-					AuthUI.getInstance()
-						.createSignInIntentBuilder()
-						.setIsSmartLockEnabled(false)
-						.setAvailableProviders(
-							listOf(
-								AuthUI.IdpConfig.EmailBuilder().build(),
-								AuthUI.IdpConfig.GoogleBuilder().build()
-							)
-						)
-						.setLogo(R.drawable.img_login_logo)
-						.setTheme(R.style.LoginTheme)
-						.build(),
-					Constants.RC_SIGN_IN
-				)
-			}
-		}
-
 	}
 
-	override fun onSupportNavigateUp(): Boolean {
-		return findNavController(R.id.nav_host_fragment).navigateUp()
+	private fun goToAuthenticationFragment() {
+		navController?.navigate(R.id.action_splashFragment_to_authenticationFragment)
+		applyFullScreen()
 	}
 
-	override fun onResume() {
-		super.onResume()
-		// Bind Firebase Auth instance whit Firebase Auth State Listener.
-		authStateListener?.let {
-			firebaseAuth.addAuthStateListener(it)
-		}
-	}
-
-	override fun onPause() {
-		super.onPause()
-		// Remove Firebase Auth State Listener from Firebase Auth instance.
-		authStateListener?.let {
-			firebaseAuth.removeAuthStateListener(it)
-		}
+	private fun getUserFromDataBase(uid: String) {
+		viewModel.setUid(uid)
 	}
 
 	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 		super.onActivityResult(requestCode, resultCode, data)
 
-		if (Constants.RC_SIGN_IN == requestCode) {
+		if (Constants.RC_GOOGLE_SIGN_IN == requestCode) {
 			if (Activity.RESULT_OK == resultCode) {
-				Toast.makeText(this, "Sign In -> Result OK!   :) ", Toast.LENGTH_SHORT).show()
-			} else {
-				Toast.makeText(this, "Sign In -> Result KO!   :( ", Toast.LENGTH_SHORT).show()
+				Toast.makeText(this, "Google Sign In -> Result OK!   :) ", Toast.LENGTH_SHORT).show()
+				val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+				viewModel.googleSinInTask.postValue(task)
 			}
 		}
+
 	}
-
-	
-
 }
