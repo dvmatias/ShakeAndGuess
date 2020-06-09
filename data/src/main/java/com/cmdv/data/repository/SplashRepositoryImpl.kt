@@ -27,11 +27,11 @@ class SplashRepositoryImpl : SplashRepository {
 		val uid: String = firebaseUser?.uid ?: ""
 		val email: String = firebaseUser?.email ?: ""
 		val displayName: String = firebaseUser?.displayName ?: ""
-		val isNew: Boolean? = false
+		val isNew = false
 		val isAuthenticated: Boolean = firebaseUser != null
-		val isCreated: Boolean? = false
+		val isCreated = false
 
-		isUserAuthenticateInFirebaseMutableLiveData.value = UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated)
+		isUserAuthenticateInFirebaseMutableLiveData.postValue(UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated))
 		return isUserAuthenticateInFirebaseMutableLiveData
 	}
 
@@ -46,7 +46,7 @@ class SplashRepositoryImpl : SplashRepository {
 				document?.let {
 					if (it.exists()) {
 						val user = it.toObject(UserModel::class.java)
-						userMutableLiveData.value = user
+						userMutableLiveData.postValue(user)
 					}
 				}
 			} else {

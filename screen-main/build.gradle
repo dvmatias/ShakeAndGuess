@@ -1,20 +1,19 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.cmdv.shakeandguess"
         minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
     }
 
     buildTypes {
@@ -23,7 +22,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            applicationIdSuffix ".debug"
             debuggable true
         }
     }
@@ -31,12 +29,10 @@ android {
     productFlavors {
         QA {
             dimension 'environment'
-            applicationIdSuffix '.qa'
             versionNameSuffix '-qa'
         }
         PRODUCTION {
             dimension 'environment'
-            applicationIdSuffix '.production'
             versionNameSuffix '-production'
         }
     }
@@ -48,20 +44,15 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':screen-splash')
-    implementation project(path: ':screen-main')
+    implementation project(path: ':core')
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
-    // App compat
-    implementation libs.appcompat
-    // Kotlin
-    implementation libs.kotlin
-    implementation libs.ktx
     // Testing
     implementation libs.junit
     implementation libs.junitx
     implementation libs.espresso
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // Firebase
     implementation libs.firebaseUiAuth
     implementation libs.firebaseCore

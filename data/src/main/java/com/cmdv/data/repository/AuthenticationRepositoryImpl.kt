@@ -35,10 +35,10 @@ class AuthenticationRepositoryImpl : AuthenticationRepository {
 					val uid: String = it.uid
 					val email: String = it.email ?: ""
 					val displayName: String = it.displayName ?: ""
-					val isNew: Boolean? = isNewUser
-					val isAuthenticated: Boolean = false
-					val isCreated: Boolean? = false
-					authenticatedUserMutableLiveData.value = UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated)
+					val isNew: Boolean = isNewUser
+					val isAuthenticated = true
+					val isCreated = false
+					authenticatedUserMutableLiveData.postValue(UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated))
 				}
 			} else {
 				Log.d(AuthenticationRepositoryImpl::class.java.simpleName, "UserTask ERROR: ${authTask.exception?.message}")
@@ -64,17 +64,17 @@ class AuthenticationRepositoryImpl : AuthenticationRepository {
 								val uid: String = it.uid
 								val email: String = it.email
 								val displayName: String = it.displayName
-								val isNew: Boolean? = it.isNew
+								val isNew: Boolean = it.isNew
 								val isAuthenticated: Boolean = it.isAuthenticated
-								val isCreated: Boolean? = true
-								newUserMutableLiveData.value = UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated)
+								val isCreated = true
+								newUserMutableLiveData.postValue(UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated))
 							}
 						} else {
 							Log.d(AuthenticationRepositoryImpl::class.java.simpleName, "${userCreationTask.exception?.message}")
 						}
 					}
 				} else {
-					newUserMutableLiveData.setValue(authenticatedUser)
+					newUserMutableLiveData.postValue(authenticatedUser)
 				}
 			} else {
 				Log.d(AuthenticationRepositoryImpl::class.java.simpleName, "${uidTask.exception?.message}")
