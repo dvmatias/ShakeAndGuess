@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 29
@@ -41,13 +42,13 @@ android {
     }
     flavorDimensions('environment')
 
-    dataBinding {
-        enabled = true
+    buildFeatures{
+        dataBinding = true
     }
 }
 
 dependencies {
-    implementation project(path: ':feature-splash')
+    implementation project(path: ':screen-splash')
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
@@ -60,4 +61,11 @@ dependencies {
     implementation libs.junit
     implementation libs.junitx
     implementation libs.espresso
+    // Firebase
+    implementation libs.firebaseUiAuth
+    implementation libs.firebaseCore
+    implementation libs.firebaseAuth
+    implementation libs.firestore
+    implementation libs.playServicesAuth
+
 }

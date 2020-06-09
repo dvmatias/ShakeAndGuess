@@ -11,7 +11,7 @@
 		android:theme="@style/AppTheme">
 		<!-- Splash Activity -->
 		<activity
-			android:name="com.cmdv.feature.SplashActivity"
+			android:name="com.cmdv.screen.SplashActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:theme="@style/SplashActivityTheme">
 			<intent-filter>
