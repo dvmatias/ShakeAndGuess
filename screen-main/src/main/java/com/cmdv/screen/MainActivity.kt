@@ -2,6 +2,7 @@ package com.cmdv.screen
 
 import android.os.Bundle
 import com.cmdv.core.base.BaseMVVMActivity
+import com.cmdv.core.extensions.applyImmersiveFullScreen
 import com.cmdv.screen.databinding.ActivityMainBinding
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainActivityViewModel, MainActivityViewModelFactory>() {
@@ -12,6 +13,7 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainActivityViewModel
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		applyImmersiveFullScreen()
 	}
 	
 }

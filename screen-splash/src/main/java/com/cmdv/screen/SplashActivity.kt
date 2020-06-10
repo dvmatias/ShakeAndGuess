@@ -5,8 +5,7 @@ import android.os.Bundle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.cmdv.core.base.BaseMVVMActivity
-import com.cmdv.core.extensions.applyFullScreen
-import com.cmdv.core.extensions.applyImmersiveFullScreenWithNavigationBar
+import com.cmdv.core.extensions.applyImmersiveFullScreen
 import com.cmdv.data.repository.SplashRepositoryImpl
 import com.cmdv.domain.model.UserModel
 import com.cmdv.screen.databinding.ActivitySplashBinding
@@ -23,7 +22,7 @@ class SplashActivity : BaseMVVMActivity<ActivitySplashBinding, SplashActivityVie
 	@SuppressLint("ClickableViewAccessibility")
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		applyImmersiveFullScreenWithNavigationBar()
+		applyImmersiveFullScreen()
 
 		setupViewModel()
 		checkIfUserIsAuthenticated()
@@ -62,7 +61,6 @@ class SplashActivity : BaseMVVMActivity<ActivitySplashBinding, SplashActivityVie
 
 	private fun goToAuthenticationFragment() {
 		navController?.navigate(R.id.action_splashFragment_to_authenticationFragment)
-		applyFullScreen()
 	}
 
 	fun goToMainActivity(authenticatedUser: UserModel) {

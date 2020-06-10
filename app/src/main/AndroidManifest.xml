@@ -14,7 +14,7 @@
 			android:name="com.cmdv.screen.SplashActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:screenOrientation="portrait"
-			android:theme="@style/SplashActivityTheme">
+			android:theme="@style/FullScreenActivityTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
@@ -25,7 +25,8 @@
 		<activity
 			android:name="com.cmdv.screen.MainActivity"
 			android:screenOrientation="portrait"
-			android:theme="@style/SplashActivityTheme" />
+			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:theme="@style/FullScreenActivityTheme" />
 
 	</application>
 
