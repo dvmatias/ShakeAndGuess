@@ -13,4 +13,5 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainActivityViewModel
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 	}
+	
 }

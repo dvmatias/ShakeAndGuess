@@ -1,4 +1,4 @@
-package com.cmdv.screen.fragments
+package com.cmdv.screen.fragments.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
