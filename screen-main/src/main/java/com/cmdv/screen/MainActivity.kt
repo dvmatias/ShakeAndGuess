@@ -4,6 +4,9 @@ import android.os.Bundle
 import com.cmdv.core.base.BaseMVVMActivity
 import com.cmdv.core.extensions.applyImmersiveFullScreen
 import com.cmdv.screen.databinding.ActivityMainBinding
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainActivityViewModel, MainActivityViewModelFactory>() {
 
@@ -14,6 +17,34 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainActivityViewModel
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		applyImmersiveFullScreen()
+
+		setupSignOutButton()
 	}
-	
+
+	private fun setupSignOutButton() {
+		binding.fabSignOut.setOnClickListener {
+			FirebaseAuth.getInstance().let { firebaseAuth ->
+				firebaseAuth.currentUser?.providerData?.let {
+					for (userInfo in it) {
+						when (userInfo.providerId) {
+							"google.com" -> googleSignOut()
+						}
+					}
+				}
+				firebaseAuth.signOut()
+			}
+			finish()
+		}
+	}
+
+	private fun googleSignOut() {
+		val googleSignInOptions = GoogleSignInOptions
+			.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+			.requestIdToken(getString(R.string.default_web_client_id))
+			.requestEmail()
+			.build()
+
+		GoogleSignIn.getClient(this, googleSignInOptions).signOut()
+	}
+
 }
