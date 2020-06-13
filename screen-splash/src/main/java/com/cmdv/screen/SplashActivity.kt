@@ -9,6 +9,7 @@ import com.cmdv.core.extensions.applyImmersiveFullScreen
 import com.cmdv.data.repository.SplashRepositoryImpl
 import com.cmdv.domain.model.UserModel
 import com.cmdv.screen.databinding.ActivitySplashBinding
+import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 
 class SplashActivity : BaseMVVMActivity<ActivitySplashBinding, SplashActivityViewModel, SplashActivityViewModelFactory>() {
@@ -23,6 +24,8 @@ class SplashActivity : BaseMVVMActivity<ActivitySplashBinding, SplashActivityVie
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		applyImmersiveFullScreen()
+
+		FirebaseAuth.getInstance().signOut()
 
 		setupViewModel()
 		checkIfUserIsAuthenticated()

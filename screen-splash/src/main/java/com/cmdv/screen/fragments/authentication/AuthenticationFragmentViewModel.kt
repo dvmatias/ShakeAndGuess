@@ -20,7 +20,7 @@ class AuthenticationFragmentViewModel(
 
 	fun createUser(authenticatedUser: UserModel) {
 		createdUserLiveData =
-			authenticationRepository.createUserInFirestoreIfNotExists(authenticatedUser)
+			authenticationRepository.createUserInFirebaseDatabaseIfNotExists(authenticatedUser)
 	}
 
 }

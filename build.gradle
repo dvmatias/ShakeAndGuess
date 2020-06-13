@@ -14,7 +14,8 @@ buildscript {
         firebase_ui_auth_version = '6.2.1'
         firebase_core_version = '17.4.3'
         firebase_auth_version = '19.3.1'
-        firestore_version = '21.4.3'
+        firebase_firestore_version = '21.4.3'
+        firebase_database_version = '19.3.0'
         playstore_services_auth_version = '18.0.0'
         // Testing
         junit_version = '4.13'
@@ -50,7 +51,8 @@ buildscript {
                 firebaseUiAuth       : ('com.firebaseui:firebase-ui-auth:' + firebase_ui_auth_version),
                 firebaseCore         : ('com.google.firebase:firebase-core:' + firebase_core_version),
                 firebaseAuth         : ('com.google.firebase:firebase-auth:' + firebase_auth_version),
-                firestore            : ('com.google.firebase:firebase-firestore:' + firestore_version),
+                firebaseFirestore    : ('com.google.firebase:firebase-firestore:' + firebase_firestore_version),
+                firebaseDatabase     : ('com.google.firebase:firebase-database:' + firebase_database_version),
                 playServicesAuth     : ('com.google.android.gms:play-services-auth:' + playstore_services_auth_version),
                 // Testing
                 junit                : ('junit:junit:' + junit_version),
