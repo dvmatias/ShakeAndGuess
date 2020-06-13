@@ -13,7 +13,7 @@
 		<activity
 			android:name="com.cmdv.screen.SplashActivity"
 			android:configChanges="orientation|keyboardHidden|screenSize"
-			android:screenOrientation="portrait"
+			android:screenOrientation="landscape"
 			android:theme="@style/FullScreenActivityTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
 		<!-- Main Activity -->
 		<activity
 			android:name="com.cmdv.screen.MainActivity"
-			android:screenOrientation="portrait"
+			android:screenOrientation="landscape"
 			android:configChanges="orientation|keyboardHidden|screenSize"
 			android:theme="@style/FullScreenActivityTheme" />
 
