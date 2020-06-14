@@ -2,4 +2,7 @@
 
 	<color name="black_overlay">#66000000</color>
 
+	<color name="color_fragment_home_footer_bgr">#61a8ff</color>
+	<color name="color_fragment_home_button_random_bgr">#4090F3</color>
+
 </resources>

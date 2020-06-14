@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
 			if (categories.isNotEmpty()) {
 				val categoryAdapter = CategoryRecyclerAdapter()
 				recycler_categories.apply {
-					layoutManager = GridLayoutManager(activity, 2, GridLayoutManager.VERTICAL, false)
+					layoutManager = GridLayoutManager(activity, 4, GridLayoutManager.VERTICAL, false)
 					adapter = categoryAdapter
 				}
 				categoryAdapter.apply {

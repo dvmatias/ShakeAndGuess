@@ -1,6 +1,6 @@
 <resources>
 
-	<style name="AppTheme" parent="Theme.AppCompat" />
+	<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" />
 
 	<style name="FullScreenActivityTheme" parent="AppTheme">
 		<item name="android:windowContentTransitions">true</item>

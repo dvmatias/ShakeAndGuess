@@ -22,19 +22,19 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainActivityViewModel
 	}
 
 	private fun setupSignOutButton() {
-		binding.fabSignOut.setOnClickListener {
-			FirebaseAuth.getInstance().let { firebaseAuth ->
-				firebaseAuth.currentUser?.providerData?.let {
-					for (userInfo in it) {
-						when (userInfo.providerId) {
-							"google.com" -> googleSignOut()
-						}
-					}
-				}
-				firebaseAuth.signOut()
-			}
-			finish()
-		}
+//		binding.fabSignOut.setOnClickListener {
+//			FirebaseAuth.getInstance().let { firebaseAuth ->
+//				firebaseAuth.currentUser?.providerData?.let {
+//					for (userInfo in it) {
+//						when (userInfo.providerId) {
+//							"google.com" -> googleSignOut()
+//						}
+//					}
+//				}
+//				firebaseAuth.signOut()
+//			}
+//			finish()
+//		}
 	}
 
 	private fun googleSignOut() {
