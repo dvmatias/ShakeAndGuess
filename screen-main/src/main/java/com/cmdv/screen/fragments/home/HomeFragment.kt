@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.view.animation.LayoutAnimationController
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -43,6 +45,7 @@ class HomeFragment : Fragment() {
 
 		setupViewModel()
 		setupRecyclerView()
+		observeForCutoutLeftScreen()
 		fetchCategories()
 	}
 
@@ -53,21 +56,27 @@ class HomeFragment : Fragment() {
 
 	private fun setupRecyclerView() {
 		categoryAdapter = CategoryRecyclerAdapter(requireContext())
+		val controller: LayoutAnimationController =
+			AnimationUtils.loadLayoutAnimation(requireContext(), R.anim.layout_slide_from_bottom)
+
 		recycler_categories.apply {
 			layoutManager = GridLayoutManager(activity, CATEGORIES_ROW_QUANTITY, GridLayoutManager.VERTICAL, false)
 			adapter = categoryAdapter
 			addItemDecoration(CategoryItemDecoration())
+			layoutAnimation = controller
 		}
+	}
 
-		activity?.let {
-			ViewModelProvider(it).get(MainActivityViewModel::class.java).displayCutoutLeft.observe(viewLifecycleOwner, Observer {
-				val params: ConstraintLayout.LayoutParams =
+	private fun observeForCutoutLeftScreen() {
+		ViewModelProvider(requireActivity())
+			.get(MainActivityViewModel::class.java)
+			.displayCutoutLeft
+			.observe(viewLifecycleOwner, Observer {
+				binding.recyclerCategories.layoutParams =
 					(binding.recyclerCategories.layoutParams as ConstraintLayout.LayoutParams).apply {
 						leftMargin = it
 					}
-				binding.recyclerCategories.layoutParams = params
 			})
-		}
 	}
 
 	private fun fetchCategories() {
@@ -77,6 +86,7 @@ class HomeFragment : Fragment() {
 				categoryAdapter.apply {
 					setListener(::onCategoryClick)
 					setData(categories)
+					binding.recyclerCategories.scheduleLayoutAnimation()
 				}
 			} else {
 				logWarningMessage("There are not categories to display")
