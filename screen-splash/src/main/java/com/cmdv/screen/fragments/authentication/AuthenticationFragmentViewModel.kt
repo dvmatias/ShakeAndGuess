@@ -1,6 +1,6 @@
 package com.cmdv.screen.fragments.authentication
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.cmdv.core.base.BaseMVVMViewModel
 import com.cmdv.domain.model.UserModel
 import com.cmdv.domain.repository.AuthenticationRepository
@@ -10,8 +10,8 @@ class AuthenticationFragmentViewModel(
 	private val authenticationRepository: AuthenticationRepository
 ) : BaseMVVMViewModel() {
 
-	lateinit var authenticatedUserLiveData: LiveData<UserModel>
-	lateinit var createdUserLiveData: LiveData<UserModel>
+	var authenticatedUserLiveData = MutableLiveData<UserModel>()
+	var createdUserLiveData = MutableLiveData<UserModel>()
 
 	fun signInWithGoogle(googleAuthCredential: AuthCredential) {
 		authenticatedUserLiveData =
@@ -20,7 +20,7 @@ class AuthenticationFragmentViewModel(
 
 	fun createUser(authenticatedUser: UserModel) {
 		createdUserLiveData =
-			authenticationRepository.createUserInFirestoreIfNotExists(authenticatedUser)
+			authenticationRepository.createUserInFirebaseDatabaseIfNotExists(authenticatedUser)
 	}
 
 }

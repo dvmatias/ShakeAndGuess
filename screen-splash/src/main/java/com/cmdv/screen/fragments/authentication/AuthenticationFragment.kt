@@ -1,10 +1,11 @@
 package com.cmdv.screen.fragments.authentication
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -13,14 +14,13 @@ import com.cmdv.core.Constants
 import com.cmdv.data.repository.AuthenticationRepositoryImpl
 import com.cmdv.domain.model.UserModel
 import com.cmdv.screen.R
-import com.cmdv.screen.SplashActivityViewModel
+import com.cmdv.screen.SplashActivity
 import com.cmdv.screen.databinding.FragmentAuthenticationBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 
@@ -55,16 +55,7 @@ class AuthenticationFragment : Fragment() {
 
 	private fun setupGoogleSignInButton() {
 		binding.googleSignInButton.setOnClickListener {
-			val signInIntent = googleSignInClient.signInIntent
-
-			activity?.let {
-				it.startActivityForResult(signInIntent, Constants.RC_GOOGLE_SIGN_IN)
-				ViewModelProvider(it).get(SplashActivityViewModel::class.java)
-					.googleSinInTask.observe(viewLifecycleOwner, Observer { task ->
-						onGoogleSignInResult(task)
-					})
-
-			}
+			signInWithGoogle()
 		}
 	}
 
@@ -77,38 +68,63 @@ class AuthenticationFragment : Fragment() {
 
 		activity?.let {
 			googleSignInClient = GoogleSignIn.getClient(it, googleSignInOptions)
-			googleSignInClient.signOut()
 		}
 	}
 
-	private fun onGoogleSignInResult(task: Task<GoogleSignInAccount>) {
-		try {
-			val googleSignInAccount = task.getResult(ApiException::class.java)
-			googleSignInAccount?.let {
-				getGoogleAuthCredential(it)
-			}
-		} catch (e: Exception) {
-			e.printStackTrace()
-		}
+	private fun signInWithGoogle() {
+		val signInIntent = googleSignInClient.signInIntent
 
+		startActivityForResult(signInIntent, Constants.RC_GOOGLE_SIGN_IN)
+	}
+
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		super.onActivityResult(requestCode, resultCode, data)
+
+		if (Constants.RC_GOOGLE_SIGN_IN == requestCode) {
+			if (Activity.RESULT_OK == resultCode) {
+				val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+				try {
+					val googleSignInAccount: GoogleSignInAccount? = task.getResult(ApiException::class.java)
+					googleSignInAccount?.let {
+						getGoogleAuthCredential(it)
+					}
+				} catch (e: Exception) {
+					e.printStackTrace()
+				}
+			}
+		}
 	}
 
 	private fun getGoogleAuthCredential(googleSignInAccount: GoogleSignInAccount) {
 		val googleTokenId = googleSignInAccount.idToken
-		val googleAuthCredential = GoogleAuthProvider.getCredential(googleTokenId, null)
+		val googleAuthCredential: AuthCredential = GoogleAuthProvider.getCredential(googleTokenId, null)
 		signInWithGoogleAuthCredential(googleAuthCredential)
 	}
 
 	private fun signInWithGoogleAuthCredential(googleAuthCredential: AuthCredential) {
 		viewModel.signInWithGoogle(googleAuthCredential)
 		viewModel.authenticatedUserLiveData.observe(viewLifecycleOwner, Observer { authenticatedUser ->
-			goToMainActivity(authenticatedUser)
+			if (authenticatedUser.isNew) {
+				createNewUser(authenticatedUser)
+			} else {
+				goToMainActivity(authenticatedUser)
+			}
 		})
 	}
 
-	private fun goToMainActivity(authenticatedUser: UserModel) {
-		Toast.makeText(activity, "Go To Main Activity!!", Toast.LENGTH_SHORT).show()
+	private fun createNewUser(authenticatedUser: UserModel) {
+		viewModel.createUser(authenticatedUser)
+		viewModel.createdUserLiveData.observe(viewLifecycleOwner, Observer { user ->
+			goToMainActivity(user)
+		})
 	}
 
+	/*****************************************************************************************************************
+	 * Destinations
+	 */
+
+	private fun goToMainActivity(authenticatedUser: UserModel) {
+		(activity as SplashActivity).goToMainActivity(authenticatedUser)
+	}
 
 }

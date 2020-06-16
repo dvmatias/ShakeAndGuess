@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context=".fragments.home.HomeFragment">
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/recycler_categories"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			app:layout_constraintBottom_toTopOf="@id/fragment_home_footer"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			android:src="@drawable/img_fragment_home_footer_top_shadow"
+			android:adjustViewBounds="true"
+			android:scaleType="centerCrop"
+			app:layout_constraintBottom_toTopOf="@id/fragment_home_footer"/>
+
+		<androidx.appcompat.widget.AppCompatImageView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			android:src="@drawable/img_fragment_home_footer_top"
+			android:adjustViewBounds="true"
+			android:scaleType="centerCrop"
+			app:layout_constraintBottom_toTopOf="@id/fragment_home_footer"/>
+
+		<!-- FOOTER LAYOUT -->
+		<include
+			android:id="@+id/fragment_home_footer"
+			layout="@layout/fragment_home_footer" />
+
+		<androidx.cardview.widget.CardView
+			android:id="@+id/cv_sound_btn"
+			android:layout_width="52dp"
+			android:layout_height="52dp"
+			android:layout_margin="12dp"
+			app:contentPadding="2.5dp"
+			app:cardCornerRadius="28dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintBottom_toTopOf="@id/cv_logout_btn"
+			app:cardBackgroundColor="#FBDF74">
+
+			<androidx.cardview.widget.CardView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				app:cardBackgroundColor="#fff"
+				app:cardCornerRadius="25dp"
+				app:cardElevation="0dp">
+			</androidx.cardview.widget.CardView>
+
+		</androidx.cardview.widget.CardView>
+
+		<androidx.cardview.widget.CardView
+			android:id="@+id/cv_logout_btn"
+			android:layout_width="52dp"
+			android:layout_height="52dp"
+			android:layout_margin="12dp"
+			android:layout_marginEnd="16dp"
+			app:cardCornerRadius="28dp"
+			app:contentPadding="2.5dp"
+			app:cardUseCompatPadding="false"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:cardBackgroundColor="#fff">
+
+			<androidx.cardview.widget.CardView
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				app:cardBackgroundColor="#ff8080"
+				app:cardCornerRadius="25dp"
+				app:cardElevation="0dp">
+
+				<androidx.appcompat.widget.AppCompatImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:src="@drawable/ic_fragment_home_footer_button_logout"/>
+
+			</androidx.cardview.widget.CardView>
+
+		</androidx.cardview.widget.CardView>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
