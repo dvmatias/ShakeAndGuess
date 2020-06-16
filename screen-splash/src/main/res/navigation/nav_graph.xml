@@ -5,6 +5,7 @@
 	android:id="@+id/nav_graph"
 	app:startDestination="@id/splashFragment">
 
+    <!-- SPLASH FRAGMENT -->
 	<fragment
 		android:id="@+id/splashFragment"
 		android:name="com.cmdv.screen.fragments.splash.SplashFragment"
@@ -13,10 +14,34 @@
 		<action
 			android:id="@+id/action_splashFragment_to_authenticationFragment"
 			app:destination="@id/authenticationFragment" />
+		<action
+			android:id="@+id/action_to_mainActivity"
+			app:destination="@id/mainActivity">
+			<argument
+				android:name="user"
+				app:argType="string"
+				app:nullable="false"/>
+		</action>
 	</fragment>
+
+	<!-- AUTHENTICATION FRAGMENT -->
 	<fragment
 		android:id="@+id/authenticationFragment"
 		android:name="com.cmdv.screen.fragments.authentication.AuthenticationFragment"
 		android:label="fragment_authentication"
-		tools:layout="@layout/fragment_authentication" />
+		tools:layout="@layout/fragment_authentication" >
+		<action
+			android:id="@+id/action_to_mainActivity"
+			app:destination="@id/mainActivity" />
+		<argument
+			android:name="user"
+			app:argType="string"
+			app:nullable="false"/>
+	</fragment>
+
+	<!-- MAIN ACTIVITY -->
+	<activity
+		android:id="@+id/mainActivity"
+		android:name="com.cmdv.screen.MainActivity"
+		android:label="MainActivity" />
 </navigation>

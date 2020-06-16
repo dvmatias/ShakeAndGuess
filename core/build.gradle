@@ -70,5 +70,10 @@ dependencies {
     implementation libs.junit
     implementation libs.junitx
     implementation libs.espresso
-
+    // Firebase
+    implementation libs.firebaseStorage
+    implementation libs.firebaseUiStorage
+    // Glide
+    implementation libs.glide
+    annotationProcessor libs.glideCompiler
 }

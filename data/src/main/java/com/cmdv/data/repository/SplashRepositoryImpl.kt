@@ -1,21 +1,18 @@
 package com.cmdv.data.repository
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.cmdv.domain.model.UserModel
 import com.cmdv.domain.repository.SplashRepository
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.*
 
 class SplashRepositoryImpl : SplashRepository {
 
 	private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-	private val rootRef: FirebaseFirestore = FirebaseFirestore.getInstance()
+	private val databaseRootRef: FirebaseDatabase = FirebaseDatabase.getInstance()
 
-	private val usersRef: CollectionReference = rootRef.collection("users")
+	private val usersDatabaseRef: DatabaseReference = databaseRootRef.getReference("users")
 
 	/**
 	 *
@@ -27,11 +24,11 @@ class SplashRepositoryImpl : SplashRepository {
 		val uid: String = firebaseUser?.uid ?: ""
 		val email: String = firebaseUser?.email ?: ""
 		val displayName: String = firebaseUser?.displayName ?: ""
-		val isNew: Boolean? = false
+		val isNew = false
 		val isAuthenticated: Boolean = firebaseUser != null
-		val isCreated: Boolean? = false
+		val isCreated = false
 
-		isUserAuthenticateInFirebaseMutableLiveData.value = UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated)
+		isUserAuthenticateInFirebaseMutableLiveData.postValue(UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated))
 		return isUserAuthenticateInFirebaseMutableLiveData
 	}
 
@@ -40,13 +37,25 @@ class SplashRepositoryImpl : SplashRepository {
 	 */
 	override fun addUserToLiveData(uid: String): MutableLiveData<UserModel> {
 		val userMutableLiveData: MutableLiveData<UserModel> = MutableLiveData()
+
+		usersDatabaseRef.push().setValue(uid)
+		usersDatabaseRef.addListenerForSingleValueEvent(object : ValueEventListener {
+			override fun onCancelled(p0: DatabaseError) {
+				TODO("Not yet implemented")
+			}
+
+			override fun onDataChange(p0: DataSnapshot) {
+				userMutableLiveData.postValue(p0.getValue(UserModel::class.java))
+			}
+		})
+		/*
 		usersRef.document(uid).get().addOnCompleteListener{userTask ->
 			if (userTask.isSuccessful) {
 				val document: DocumentSnapshot? = userTask.result
 				document?.let {
 					if (it.exists()) {
 						val user = it.toObject(UserModel::class.java)
-						userMutableLiveData.value = user
+						userMutableLiveData.postValue(user)
 					}
 				}
 			} else {
@@ -54,8 +63,9 @@ class SplashRepositoryImpl : SplashRepository {
 				// TODO handle this error.
 				firebaseAuth.signOut()
 			}
-
 		}
+		*/
+
 		return userMutableLiveData
 	}
 }

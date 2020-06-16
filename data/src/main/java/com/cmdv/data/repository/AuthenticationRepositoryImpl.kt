@@ -4,22 +4,19 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.cmdv.domain.model.UserModel
 import com.cmdv.domain.repository.AuthenticationRepository
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.*
 
 
 class AuthenticationRepositoryImpl : AuthenticationRepository {
 
 	private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-	private val rootRef: FirebaseFirestore = FirebaseFirestore.getInstance()
+	private val databaseRootRef: FirebaseDatabase = FirebaseDatabase.getInstance()
 
-	private val usersRef: CollectionReference = rootRef.collection("users")
+	private val usersDatabaseRef: DatabaseReference = databaseRootRef.getReference("users")
 
 	/**
 	 *
@@ -35,10 +32,10 @@ class AuthenticationRepositoryImpl : AuthenticationRepository {
 					val uid: String = it.uid
 					val email: String = it.email ?: ""
 					val displayName: String = it.displayName ?: ""
-					val isNew: Boolean? = isNewUser
-					val isAuthenticated: Boolean = false
-					val isCreated: Boolean? = false
-					authenticatedUserMutableLiveData.value = UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated)
+					val isNew: Boolean = isNewUser
+					val isAuthenticated = true
+					val isCreated = false
+					authenticatedUserMutableLiveData.postValue(UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated))
 				}
 			} else {
 				Log.d(AuthenticationRepositoryImpl::class.java.simpleName, "UserTask ERROR: ${authTask.exception?.message}")
@@ -51,8 +48,43 @@ class AuthenticationRepositoryImpl : AuthenticationRepository {
 	/**
 	 *
 	 */
-	override fun createUserInFirestoreIfNotExists(authenticatedUser: UserModel): MutableLiveData<UserModel> {
+
+	val listener = DatabaseReference.CompletionListener { p0, p1 ->
+		p1.addListenerForSingleValueEvent(object : ValueEventListener {
+			override fun onCancelled(p0: DatabaseError) {
+				TODO("Not yet implemented")
+			}
+
+			override fun onDataChange(p0: DataSnapshot) {
+				TODO("Not yet implemented")
+			}
+		})
+	}
+
+	override fun createUserInFirebaseDatabaseIfNotExists(authenticatedUser: UserModel): MutableLiveData<UserModel> {
 		val newUserMutableLiveData = MutableLiveData<UserModel>()
+
+		usersDatabaseRef.child(authenticatedUser.uid).setValue(authenticatedUser, DatabaseReference.CompletionListener { p0, p1 ->
+			val uidRef = p1.setValue(authenticatedUser)
+			uidRef.addOnCompleteListener { task ->
+				if (task.isSuccessful) {
+					authenticatedUser.let {
+						val uid: String = it.uid
+						val email: String = it.email
+						val displayName: String = it.displayName
+						val isNew: Boolean = it.isNew
+						val isAuthenticated: Boolean = it.isAuthenticated
+						val isCreated = true
+						newUserMutableLiveData.postValue(UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated))
+					}
+				} else {
+					Log.d(AuthenticationRepositoryImpl::class.java.simpleName, "${task.exception?.message}")
+				}
+			}
+		})
+
+		/*
+
 		val uidRef = usersRef.document(authenticatedUser.uid)
 		uidRef.get().addOnCompleteListener { uidTask: Task<DocumentSnapshot?> ->
 			if (uidTask.isSuccessful) {
@@ -64,22 +96,24 @@ class AuthenticationRepositoryImpl : AuthenticationRepository {
 								val uid: String = it.uid
 								val email: String = it.email
 								val displayName: String = it.displayName
-								val isNew: Boolean? = it.isNew
+								val isNew: Boolean = it.isNew
 								val isAuthenticated: Boolean = it.isAuthenticated
-								val isCreated: Boolean? = true
-								newUserMutableLiveData.value = UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated)
+								val isCreated = true
+								newUserMutableLiveData.postValue(UserModel(uid, email, displayName, isNew, isAuthenticated, isCreated))
 							}
 						} else {
 							Log.d(AuthenticationRepositoryImpl::class.java.simpleName, "${userCreationTask.exception?.message}")
 						}
 					}
 				} else {
-					newUserMutableLiveData.setValue(authenticatedUser)
+					newUserMutableLiveData.postValue(authenticatedUser)
 				}
 			} else {
 				Log.d(AuthenticationRepositoryImpl::class.java.simpleName, "${uidTask.exception?.message}")
 			}
 		}
+
+		*/
 		return newUserMutableLiveData
 	}
 }

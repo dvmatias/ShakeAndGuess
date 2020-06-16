@@ -42,13 +42,15 @@ android {
     }
     flavorDimensions('environment')
 
-    buildFeatures{
+    buildFeatures {
         dataBinding = true
     }
 }
 
 dependencies {
+    implementation project(path: ':core')
     implementation project(path: ':screen-splash')
+    implementation project(path: ':screen-main')
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
@@ -65,7 +67,9 @@ dependencies {
     implementation libs.firebaseUiAuth
     implementation libs.firebaseCore
     implementation libs.firebaseAuth
-    implementation libs.firestore
+    implementation libs.firebaseFirestore
+    implementation libs.firebaseDatabase
     implementation libs.playServicesAuth
-
+    implementation libs.firebaseStorage
+    implementation libs.firebaseUiStorage
 }

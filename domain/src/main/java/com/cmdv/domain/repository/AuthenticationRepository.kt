@@ -8,6 +8,6 @@ interface AuthenticationRepository {
 
 	fun firebaseSignInWithGoogle(googleAuthCredential: AuthCredential): MutableLiveData<UserModel>
 
-	fun createUserInFirestoreIfNotExists(authenticatedUser: UserModel): MutableLiveData<UserModel>
+	fun createUserInFirebaseDatabaseIfNotExists(authenticatedUser: UserModel): MutableLiveData<UserModel>
 
 }
