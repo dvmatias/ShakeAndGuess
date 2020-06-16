@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cmdv.core.helpers.loadCategoryImageFromStorage
 import com.cmdv.domain.model.CategoryModel
 import com.cmdv.screen.R
+import com.devs.vectorchildfinder.VectorChildFinder
 import java.lang.ref.WeakReference
 
+private const val CATEGORY_BG_PATH_TOP_NAME = "path_wave_top"
+private const val CATEGORY_BG_PATH_BOTTOM_NAME = "path_wave_bottom"
 
 class CategoryRecyclerAdapter(private val context: Context) : RecyclerView.Adapter<CategoryRecyclerAdapter.CategoryViewHolder>() {
 
@@ -43,13 +46,13 @@ class CategoryRecyclerAdapter(private val context: Context) : RecyclerView.Adapt
 	override fun getItemCount(): Int = data.size
 
 	inner class CategoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-		private val cvImage: CardView = itemView.findViewById(R.id.cv_image)
 		private val ivCategoryBgr: AppCompatImageView = itemView.findViewById(R.id.iv_category_bgr)
 		private val ivCategoryImage: AppCompatImageView = itemView.findViewById(R.id.iv_category_image)
 		private val tvCategoryName: AppCompatTextView = itemView.findViewById(R.id.tv_category_name)
 
 		fun bindView(context: Context, category: CategoryModel, clickListener: (CategoryModel) -> Unit) {
 			tvCategoryName.text = category.name
+			colorBackground(context, category.colorTop, category.colorBottom)
 			loadCategoryImageFromStorage(
 				WeakReference(context),
 				category.imageName,
@@ -57,13 +60,12 @@ class CategoryRecyclerAdapter(private val context: Context) : RecyclerView.Adapt
 			)
 
 			itemView.setOnClickListener { clickListener(category) }
-
-			colorBackground(category.colorTop, category.colorBottom)
 		}
 
-		private fun colorBackground(colorTop: String, colorBottom: String) {
-			cvImage.setCardBackgroundColor(Color.parseColor(colorTop))
-			ivCategoryBgr.drawable.setTint(Color.parseColor(colorBottom))
+		private fun colorBackground(context: Context, colorTop: String, colorBottom: String) {
+			val vector = VectorChildFinder(context, R.drawable.img_fragment_home_category_item_bgr, ivCategoryBgr)
+			vector.findPathByName(CATEGORY_BG_PATH_TOP_NAME).fillColor = Color.parseColor(colorTop)
+			vector.findPathByName(CATEGORY_BG_PATH_BOTTOM_NAME).fillColor = Color.parseColor(colorBottom)
 		}
 
 	}
