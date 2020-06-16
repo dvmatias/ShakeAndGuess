@@ -3,6 +3,7 @@ package com.cmdv.core.helpers
 import android.content.Context
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.storage.FirebaseStorage
 import java.lang.ref.WeakReference
 
@@ -14,6 +15,7 @@ fun loadCategoryImageFromStorage(context: WeakReference<Context>, imageName: Str
 		context.get()?.let { context ->
 			Glide.with(context)
 				.load(uri)
+				.diskCacheStrategy(DiskCacheStrategy.DATA)
 				.fitCenter()
 				.into(view)
 		}

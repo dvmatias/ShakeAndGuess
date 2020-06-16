@@ -8,34 +8,17 @@
 		android:layout_height="match_parent"
 		tools:context=".fragments.home.HomeFragment">
 
+		<!-- CATEGORIES RECYCLER VIEW -->
 		<androidx.recyclerview.widget.RecyclerView
 			android:id="@+id/recycler_categories"
 			android:layout_width="0dp"
 			android:layout_height="0dp"
-			app:layout_constraintBottom_toTopOf="@id/fragment_home_footer"
+			android:transitionGroup="false"
+			android:clipChildren="false"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintTop_toTopOf="parent" />
-
-		<androidx.appcompat.widget.AppCompatImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			android:src="@drawable/img_fragment_home_footer_top_shadow"
-			android:adjustViewBounds="true"
-			android:scaleType="centerCrop"
-			app:layout_constraintBottom_toTopOf="@id/fragment_home_footer"/>
-
-		<androidx.appcompat.widget.AppCompatImageView
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			android:src="@drawable/img_fragment_home_footer_top"
-			android:adjustViewBounds="true"
-			android:scaleType="centerCrop"
-			app:layout_constraintBottom_toTopOf="@id/fragment_home_footer"/>
 
 		<!-- FOOTER LAYOUT -->
 		<include
