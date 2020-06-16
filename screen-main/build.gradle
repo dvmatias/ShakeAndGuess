@@ -61,4 +61,6 @@ dependencies {
     implementation libs.firebaseDatabase
     implementation libs.playServicesAuth
 
+    api 'com.github.devsideal:VectorChildFinder:1.0.0'
+
 }

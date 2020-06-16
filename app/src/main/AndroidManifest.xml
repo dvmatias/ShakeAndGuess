@@ -1,6 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.cmdv.shakeandguess">
 
+	<uses-permission android:name="android.permission.INTERNET" />
+
 	<application
 		android:allowBackup="true"
 		android:fullBackupContent="false"
@@ -9,6 +11,7 @@
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme">
+
 		<!-- Splash Activity -->
 		<activity
 			android:name="com.cmdv.screen.SplashActivity"
@@ -24,8 +27,8 @@
 		<!-- Main Activity -->
 		<activity
 			android:name="com.cmdv.screen.MainActivity"
-			android:screenOrientation="landscape"
 			android:configChanges="orientation|keyboardHidden|screenSize"
+			android:screenOrientation="landscape"
 			android:theme="@style/FullScreenActivityTheme" />
 
 	</application>

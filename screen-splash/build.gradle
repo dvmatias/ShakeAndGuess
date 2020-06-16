@@ -61,5 +61,4 @@ dependencies {
     implementation libs.firebaseFirestore
     implementation libs.firebaseDatabase
     implementation libs.playServicesAuth
-
 }

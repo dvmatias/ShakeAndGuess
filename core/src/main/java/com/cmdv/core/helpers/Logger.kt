@@ -1,4 +1,4 @@
-package com.cmdv.core
+package com.cmdv.core.helpers
 
 import android.util.Log
 import com.cmdv.core.Constants.Companion.TAG_LOGGER

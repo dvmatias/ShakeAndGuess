@@ -1,4 +1,4 @@
-package com.cmdv.core
+package com.cmdv.core.helpers
 
 import android.content.Context
 import android.widget.Toast

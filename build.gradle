@@ -16,6 +16,8 @@ buildscript {
         firebase_auth_version = '19.3.1'
         firebase_firestore_version = '21.4.3'
         firebase_database_version = '19.3.0'
+        firebase_storage_version = '19.1.1'
+        firebase_ui_storage_version = '4.3.2'
         playstore_services_auth_version = '18.0.0'
         // Testing
         junit_version = '4.13'
@@ -53,6 +55,8 @@ buildscript {
                 firebaseAuth         : ('com.google.firebase:firebase-auth:' + firebase_auth_version),
                 firebaseFirestore    : ('com.google.firebase:firebase-firestore:' + firebase_firestore_version),
                 firebaseDatabase     : ('com.google.firebase:firebase-database:' + firebase_database_version),
+                firebaseStorage      : ('com.google.firebase:firebase-storage:' + firebase_storage_version),
+                firebaseUiStorage    : ('com.firebaseui:firebase-ui-storage:' + firebase_ui_storage_version),
                 playServicesAuth     : ('com.google.android.gms:play-services-auth:' + playstore_services_auth_version),
                 // Testing
                 junit                : ('junit:junit:' + junit_version),
@@ -69,7 +73,8 @@ buildscript {
                 retrofitLogging      : ('com.squareup.okhttp3:logging-interceptor:' + retrofit_logging_version),
                 retrofitJsonConverter: ('com.squareup.retrofit2:converter-gson:' + retrofit_json_converter_version),
                 // Glide
-                glide                : ('com.github.bumptech.glide:glide:' + glide_version)
+                glide                : ('com.github.bumptech.glide:glide:' + glide_version),
+                glideCompiler        : ('com.github.bumptech.glide:compiler:' + glide_version)
         ]
     }
 
@@ -92,6 +97,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 

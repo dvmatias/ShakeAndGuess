@@ -1,14 +1,19 @@
 package com.cmdv.screen
 
+import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.view.ViewTreeObserver
+import androidx.lifecycle.ViewModelProvider
 import com.cmdv.core.base.BaseMVVMActivity
 import com.cmdv.core.extensions.applyImmersiveFullScreen
 import com.cmdv.screen.databinding.ActivityMainBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainActivityViewModel, MainActivityViewModelFactory>() {
+
+	private lateinit var viewModel: MainActivityViewModel
 
 	override fun getLayoutId(): Int = R.layout.activity_main
 
@@ -18,8 +23,22 @@ class MainActivity : BaseMVVMActivity<ActivityMainBinding, MainActivityViewModel
 		super.onCreate(savedInstanceState)
 		applyImmersiveFullScreen()
 
+		setupViewModel()
 		setupSignOutButton()
+		binding.root.viewTreeObserver.addOnGlobalLayoutListener(onDisplayCutoutReadyListener)
 	}
+
+	private fun setupViewModel() {
+		viewModel = ViewModelProvider(this).get(MainActivityViewModel::class.java)
+	}
+
+	private val onDisplayCutoutReadyListener: ViewTreeObserver.OnGlobalLayoutListener =
+		ViewTreeObserver.OnGlobalLayoutListener {
+			val leftMargin =
+				if (SDK_INT >= Build.VERSION_CODES.P) window.decorView.rootWindowInsets.displayCutout?.safeInsetLeft ?: 0
+				else 0
+			viewModel.displayCutoutLeft.postValue(leftMargin)
+		}
 
 	private fun setupSignOutButton() {
 //		binding.fabSignOut.setOnClickListener {

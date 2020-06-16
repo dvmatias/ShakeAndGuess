@@ -6,7 +6,9 @@ import com.cmdv.domain.mapper.Mapper
 import com.cmdv.domain.model.CategoryModel
 
 private const val CATEGORY_NAME_DEFAULT = ""
-private const val CATEGORY_IMAGE_DEFAULT = ""
+private const val CATEGORY_IMAGE_URL_DEFAULT = ""
+private const val CATEGORY_COLOR_TOP_DEFAULT = "#FFFFFF"
+private const val CATEGORY_COLOR_BOTTOM_DEFAULT = "#EE497B"
 private const val ITEM_NAME_DEFAULT = ""
 private const val ITEM_VALUE_DEFAULT = ""
 
@@ -14,17 +16,19 @@ class CategoryFirebaseMapper : Mapper<CategoryFirebaseEntity, CategoryModel>() {
 
 	override fun transformEntityToModel(e: CategoryFirebaseEntity): CategoryModel {
 		val name: String = e.name ?: CATEGORY_NAME_DEFAULT
-		val image: String = e.image ?: CATEGORY_IMAGE_DEFAULT
+		val imageName: String = e.imageName ?: CATEGORY_IMAGE_URL_DEFAULT
+		val colorTop: String = e.colorTop ?: CATEGORY_COLOR_TOP_DEFAULT
+		val colorBottom: String = e.colorBottom ?: CATEGORY_COLOR_BOTTOM_DEFAULT
 		val items: List<CategoryModel.CategoryItemModel> = transformItems(e.items)
 
-		return CategoryModel(name, image, items)
+		return CategoryModel(name, imageName, colorTop, colorBottom, items)
 	}
 
 	private fun transformItems(items: List<CategoryItemFirebaseEntity>?): List<CategoryModel.CategoryItemModel> =
 		items?.map {
 			CategoryModel.CategoryItemModel(
-				it.name ?: ITEM_NAME_DEFAULT,
-				it.value ?: ITEM_VALUE_DEFAULT
+				name = it.name ?: ITEM_NAME_DEFAULT,
+				value = it.value ?: ITEM_VALUE_DEFAULT
 			)
 		} ?: listOf()
 

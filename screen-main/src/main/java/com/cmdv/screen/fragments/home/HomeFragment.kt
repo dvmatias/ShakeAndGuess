@@ -4,38 +4,45 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import com.cmdv.core.logWarningMessage
-import com.cmdv.core.showShortToast
+import com.cmdv.core.Constants.Companion.CATEGORIES_ROW_QUANTITY
+import com.cmdv.core.helpers.logWarningMessage
+import com.cmdv.core.helpers.showShortToast
 import com.cmdv.data.repository.CategoryRepositoryImpl
 import com.cmdv.domain.model.CategoryModel
+import com.cmdv.screen.MainActivityViewModel
 import com.cmdv.screen.R
 import com.cmdv.screen.adapters.CategoryRecyclerAdapter
+import com.cmdv.screen.databinding.FragmentHomeBinding
+import com.cmdv.screen.itemdecorators.CategoryItemDecoration
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
 
 	private lateinit var viewModel: HomeFragmentViewModel
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-	}
+	private lateinit var binding: FragmentHomeBinding
+
+	private lateinit var categoryAdapter: CategoryRecyclerAdapter
 
 	override fun onCreateView(
 		inflater: LayoutInflater, container: ViewGroup?,
 		savedInstanceState: Bundle?
 	): View? {
-		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_home, container, false)
+		binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+		return binding.root
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 
 		setupViewModel()
+		setupRecyclerView()
 		fetchCategories()
 	}
 
@@ -44,20 +51,33 @@ class HomeFragment : Fragment() {
 			.get(HomeFragmentViewModel::class.java)
 	}
 
+	private fun setupRecyclerView() {
+		categoryAdapter = CategoryRecyclerAdapter(requireContext())
+		recycler_categories.apply {
+			layoutManager = GridLayoutManager(activity, CATEGORIES_ROW_QUANTITY, GridLayoutManager.VERTICAL, false)
+			adapter = categoryAdapter
+			addItemDecoration(CategoryItemDecoration())
+		}
+
+		activity?.let {
+			ViewModelProvider(it).get(MainActivityViewModel::class.java).displayCutoutLeft.observe(viewLifecycleOwner, Observer {
+				val params: ConstraintLayout.LayoutParams =
+					(binding.recyclerCategories.layoutParams as ConstraintLayout.LayoutParams).apply {
+						leftMargin = it
+					}
+				binding.recyclerCategories.layoutParams = params
+			})
+		}
+	}
+
 	private fun fetchCategories() {
 		viewModel.fetchCategories()
 		viewModel.categoriesLiveData.observe(viewLifecycleOwner, Observer { categories: List<CategoryModel> ->
 			if (categories.isNotEmpty()) {
-				val categoryAdapter = CategoryRecyclerAdapter()
-				recycler_categories.apply {
-					layoutManager = GridLayoutManager(activity, 4, GridLayoutManager.VERTICAL, false)
-					adapter = categoryAdapter
-				}
 				categoryAdapter.apply {
 					setListener(::onCategoryClick)
 					setData(categories)
 				}
-
 			} else {
 				logWarningMessage("There are not categories to display")
 			}
