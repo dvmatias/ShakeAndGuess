@@ -47,7 +47,7 @@ class PreGameFragment : Fragment() {
         val vectorChild =
             VectorChildFinder(
                 requireContext(),
-                R.drawable.img_fragment_home_category_item_bgr,
+                R.drawable.img_fragment_game_bgr,
                 binding.ivBackground
             )
         with(vectorChild) {

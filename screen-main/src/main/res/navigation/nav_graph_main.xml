@@ -27,8 +27,8 @@
         <action
             android:id="@+id/to_gameFragment"
             app:destination="@id/gameFragment"
-            app:enterAnim="@anim/fragment_alpha_in"
-            app:popEnterAnim="@anim/fragment_alpha_in"/>
+            app:enterAnim="@null"
+            app:popEnterAnim="@null"/>
         <action
             android:id="@+id/to_homeFragment"
             app:destination="@id/homeFragment" />

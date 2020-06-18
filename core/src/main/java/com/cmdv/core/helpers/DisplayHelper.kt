@@ -1,51 +1,69 @@
 package com.cmdv.core.helpers
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.TypedArray
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import kotlin.math.roundToInt
 
 class DisplayHelper {
 
-	@Suppress("unused")
-	companion object {
+    @Suppress("unused")
+    companion object {
 
-		fun getStatusBarHeight(context: Context): Int {
-			val resId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-			return if (resId > 0) {
-				context.resources.getDimensionPixelSize(resId)
-			} else {
-				0
-			}
-		}
+        fun getScreenHeight(activity: Activity): Int {
+            val displayMetrics = DisplayMetrics()
+            activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+            return displayMetrics.heightPixels
+        }
 
-		fun getNavigationBarHeight(context: Context): Int {
-			val resId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-			return if (resId > 0) {
-				context.resources.getDimensionPixelSize(resId)
-			} else {
-				0
-			}
-		}
+        fun getScreenWidth(activity: Activity): Int {
+            val displayMetrics = DisplayMetrics()
+            activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+            return displayMetrics.widthPixels
+        }
 
-		fun getActionBarHeight(context: Context): Int {
-			val styledAttributes: TypedArray = context.theme.obtainStyledAttributes(
-				intArrayOf(android.R.attr.actionBarSize)
-			)
-			val actionBarHeight = styledAttributes.getDimension(0, 0F).toInt()
-			styledAttributes.recycle()
-			return actionBarHeight
-		}
+        fun getStatusBarHeight(context: Context): Int {
+            val resId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
+            return if (resId > 0) {
+                context.resources.getDimensionPixelSize(resId)
+            } else {
+                0
+            }
+        }
 
-		fun dpToPx(context: Context, dp: Float): Float =
-			TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics)
+        fun getNavigationBarHeight(context: Context): Int {
+            val resId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+            return if (resId > 0) {
+                context.resources.getDimensionPixelSize(resId)
+            } else {
+                0
+            }
+        }
+
+        fun getActionBarHeight(context: Context): Int {
+            val styledAttributes: TypedArray = context.theme.obtainStyledAttributes(
+                intArrayOf(android.R.attr.actionBarSize)
+            )
+            val actionBarHeight = styledAttributes.getDimension(0, 0F).toInt()
+            styledAttributes.recycle()
+            return actionBarHeight
+        }
+
+        fun dpToPx(context: Context, dp: Float): Float =
+            TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dp,
+                context.resources.displayMetrics
+            )
 
 
-		fun pxToDp(context: Context, px: Int): Int {
-			val r = context.resources
-			return (px / (r.displayMetrics.densityDpi / 160f)).roundToInt()
-		}
+        fun pxToDp(context: Context, px: Int): Int {
+            val r = context.resources
+            return (px / (r.displayMetrics.densityDpi / 160f)).roundToInt()
+        }
 
-	}
+    }
 
 }
