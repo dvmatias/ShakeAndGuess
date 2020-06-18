@@ -7,7 +7,7 @@ import com.cmdv.core.helpers.DisplayHelper
 
 private const val OFFSET_TOP: Float = 16F
 private const val OFFSET_HORIZONTAL: Float = 20F
-private const val OFFSET_LAST_ITEM_BOTTOM: Float = 26F
+private const val OFFSET_LAST_ITEM_BOTTOM: Float = 100F
 
 class CategoryItemDecoration : RecyclerView.ItemDecoration() {
 
