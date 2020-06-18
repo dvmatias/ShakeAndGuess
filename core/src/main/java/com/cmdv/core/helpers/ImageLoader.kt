@@ -9,15 +9,19 @@ import java.lang.ref.WeakReference
 
 private const val PATH_CATEGORIES = "categories"
 
-fun loadCategoryImageFromStorage(context: WeakReference<Context>, imageName: String, view: AppCompatImageView) {
-	val storageRef = FirebaseStorage.getInstance().reference
-	storageRef.child(PATH_CATEGORIES).child(imageName).downloadUrl.addOnSuccessListener { uri ->
-		context.get()?.let { context ->
-			Glide.with(context)
-				.load(uri)
-				.diskCacheStrategy(DiskCacheStrategy.DATA)
-				.fitCenter()
-				.into(view)
-		}
-	}
+fun loadCategoryImageFromStorage(
+    context: WeakReference<Context>,
+    imageName: String,
+    imageView: AppCompatImageView
+) {
+    val storageRef = FirebaseStorage.getInstance().reference
+    storageRef.child(PATH_CATEGORIES).child(imageName).downloadUrl.addOnSuccessListener { uri ->
+        context.get()?.let { context ->
+            Glide.with(context)
+                .load(uri)
+                .diskCacheStrategy(DiskCacheStrategy.DATA)
+                .fitCenter()
+                .into(imageView)
+        }
+    }
 }
