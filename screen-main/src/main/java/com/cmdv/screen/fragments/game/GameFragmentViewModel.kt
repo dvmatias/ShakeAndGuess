@@ -18,7 +18,7 @@ class GameFragmentViewModel : BaseMVVMViewModel() {
         private set
 
     fun startGameStartingCountdown() {
-        CountDown().Builder(6000,1000)
+        CountDown().Builder(6000, 1000)
             .startCountingOn(gameStartingCountDownMutableLiveData)
             .finishCountingOn(gameStartingCountDownFinishedMutableLiveData)
             .start()
@@ -28,10 +28,13 @@ class GameFragmentViewModel : BaseMVVMViewModel() {
         for (item in category.items) {
             wordsStack.push(item)
         }
+        wordsStack.shuffle()
     }
 
     fun getNewWordToGuess() {
-        wordToGuess.postValue(wordsStack.pop().value)
+        wordToGuess.postValue(
+            if (!wordsStack.empty()) wordsStack.pop().value else ""
+        )
     }
 
     open class CountDown(
@@ -39,7 +42,7 @@ class GameFragmentViewModel : BaseMVVMViewModel() {
         countDownInterval: Long
     ) : CountDownTimer(millisInFuture, countDownInterval) {
 
-        constructor(): this(0, 0)
+        constructor() : this(0, 0)
 
         private var startCountingOnMutableLiveData: MutableLiveData<Int>? = null
         private var finishCountingOnMutableLiveData: MutableLiveData<Int>? = null

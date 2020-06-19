@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.cmdv.core.Constants
 import com.cmdv.core.SimpleAnimationListener
-import com.cmdv.core.helpers.logDebugMessage
 import com.cmdv.domain.model.CategoryModel
 import com.cmdv.screen.R
 import com.cmdv.screen.databinding.FragmentGameBinding
@@ -27,6 +26,7 @@ class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
     private val args: GameFragmentArgs by navArgs()
     private lateinit var category: CategoryModel
+    private lateinit var wordToGuessInAnimations: List<Animation>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,13 +42,29 @@ class GameFragment : Fragment() {
         category = Gson().fromJson(args.category, CategoryModel::class.java)
 
         setupViewModel()
+        setupWordToGuessInAnimations()
         initCategoryWords()
         setupBackgroundColors()
         prepareGame()
+
+        binding.btn.setOnClickListener { viewModel.getNewWordToGuess() }
     }
 
     private fun setupViewModel() {
         this.viewModel = ViewModelProvider(this).get(GameFragmentViewModel()::class.java)
+    }
+
+    private fun setupWordToGuessInAnimations() {
+        wordToGuessInAnimations = listOf(
+            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_1),
+            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_2),
+            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_3),
+            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_4),
+            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_5),
+            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_6),
+            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_7),
+            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_8)
+        )
     }
 
     private fun initCategoryWords() {
@@ -70,7 +86,6 @@ class GameFragment : Fragment() {
             Observer {
                 binding.tvInitialCountEffect.visibility = View.GONE
                 animateCloseBackground()
-                startGame()
             })
     }
 
@@ -81,9 +96,9 @@ class GameFragment : Fragment() {
         // Animate background bottom image
         val animBackgroundBottomOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_background_bottom_open)
         binding.ivBackgroundBottom.startAnimation(animBackgroundBottomOpen)
-        // Wait for anim to end before start initial countdown-
+        // Wait for anim to end before start initial countdown
         animBackgroundBottomOpen.setAnimationListener(object : SimpleAnimationListener() {
-            override fun onAnimationEnd(p0: Animation?) {
+            override fun onAnimationEnd(anim: Animation?) {
                 startStartingCountDown()
             }
         })
@@ -96,6 +111,12 @@ class GameFragment : Fragment() {
         // Animate background bottom image
         val animBottomToBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_background_bottom_close)
         binding.ivBackgroundBottom.startAnimation(animBottomToBottom)
+        // Wait for anim to end before start game
+        animBottomToBottom.setAnimationListener(object : SimpleAnimationListener() {
+            override fun onAnimationEnd(anim: Animation?) {
+                startGame()
+            }
+        })
     }
 
     private fun startStartingCountDown() {
@@ -108,9 +129,7 @@ class GameFragment : Fragment() {
                     binding.tvInitialCount.text = countText
                     binding.tvInitialCountEffect.apply {
                         text = countText
-                        startAnimation(
-                            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_starting_game_count_down)
-                        )
+                        startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.anim_starting_game_count_down))
                     }
                 })
         }
@@ -118,9 +137,20 @@ class GameFragment : Fragment() {
 
     private fun startGame() {
         viewModel.wordToGuess.observe(viewLifecycleOwner, Observer {
-            
+            binding.tvWordToGuessBack.text = it
+            showWordToGuess(it)
         })
         viewModel.getNewWordToGuess()
     }
+
+    private fun showWordToGuess(value: String) {
+        with(binding.tvWordToGuessFront) {
+            text = value
+            startAnimation(getRandomWordToGuessInAnimation())
+        }
+    }
+
+    private fun getRandomWordToGuessInAnimation(): Animation =
+        wordToGuessInAnimations[(wordToGuessInAnimations.indices).random()]
 
 }

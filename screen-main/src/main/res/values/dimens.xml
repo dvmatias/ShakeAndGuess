@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="duration_word_to_guess_in_anim">325</integer>
+
+</resources>
