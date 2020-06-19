@@ -5,15 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.cmdv.core.Constants
-import com.cmdv.core.SimpleAnimationListener
+import com.cmdv.core.helpers.AnimationHelper
 import com.cmdv.domain.model.CategoryModel
 import com.cmdv.screen.R
 import com.cmdv.screen.databinding.FragmentGameBinding
@@ -26,7 +24,17 @@ class GameFragment : Fragment() {
     private lateinit var binding: FragmentGameBinding
     private val args: GameFragmentArgs by navArgs()
     private lateinit var category: CategoryModel
-    private lateinit var wordToGuessInAnimations: List<Animation>
+    private var wordToGuessInAnimations: List<Int> = listOf(
+        R.anim.anim_word_to_guess_in_1,
+        R.anim.anim_word_to_guess_in_2,
+        R.anim.anim_word_to_guess_in_3,
+        R.anim.anim_word_to_guess_in_4,
+        R.anim.anim_word_to_guess_in_5,
+        R.anim.anim_word_to_guess_in_6,
+        R.anim.anim_word_to_guess_in_7,
+        R.anim.anim_word_to_guess_in_8
+    )
+    private lateinit var animationHelper: AnimationHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,9 +48,9 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         category = Gson().fromJson(args.category, CategoryModel::class.java)
+        animationHelper = AnimationHelper(requireActivity())
 
         setupViewModel()
-        setupWordToGuessInAnimations()
         initCategoryWords()
         setupBackgroundColors()
         prepareGame()
@@ -52,19 +60,6 @@ class GameFragment : Fragment() {
 
     private fun setupViewModel() {
         this.viewModel = ViewModelProvider(this).get(GameFragmentViewModel()::class.java)
-    }
-
-    private fun setupWordToGuessInAnimations() {
-        wordToGuessInAnimations = listOf(
-            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_1),
-            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_2),
-            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_3),
-            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_4),
-            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_5),
-            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_6),
-            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_7),
-            AnimationUtils.loadAnimation(requireContext(), R.anim.anim_word_to_guess_in_8)
-        )
     }
 
     private fun initCategoryWords() {
@@ -90,33 +85,21 @@ class GameFragment : Fragment() {
     }
 
     private fun animateOpenBackground() {
-        // Animate background top image
-        val animBackgroundTopOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_background_top_open)
-        binding.ivBackgroundTop.startAnimation(animBackgroundTopOpen)
-        // Animate background bottom image
-        val animBackgroundBottomOpen = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_background_bottom_open)
-        binding.ivBackgroundBottom.startAnimation(animBackgroundBottomOpen)
-        // Wait for anim to end before start initial countdown
-        animBackgroundBottomOpen.setAnimationListener(object : SimpleAnimationListener() {
-            override fun onAnimationEnd(anim: Animation?) {
-                startStartingCountDown()
-            }
-        })
+        with(animationHelper) {
+            startAnimation(
+                R.anim.anim_background_top_open, binding.ivBackgroundTop
+            )
+            startAnimation(
+                R.anim.anim_background_bottom_open, binding.ivBackgroundBottom, ::startStartingCountDown
+            )
+        }
     }
 
     private fun animateCloseBackground() {
-        // Animate background top image
-        val animTopToTop = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_background_top_close)
-        binding.ivBackgroundTop.startAnimation(animTopToTop)
-        // Animate background bottom image
-        val animBottomToBottom = AnimationUtils.loadAnimation(requireContext(), R.anim.anim_background_bottom_close)
-        binding.ivBackgroundBottom.startAnimation(animBottomToBottom)
-        // Wait for anim to end before start game
-        animBottomToBottom.setAnimationListener(object : SimpleAnimationListener() {
-            override fun onAnimationEnd(anim: Animation?) {
-                startGame()
-            }
-        })
+        with(animationHelper) {
+            startAnimation(R.anim.anim_background_top_close, binding.ivBackgroundTop)
+            startAnimation(R.anim.anim_background_bottom_close, binding.ivBackgroundBottom, ::startGame)
+        }
     }
 
     private fun startStartingCountDown() {
@@ -129,7 +112,7 @@ class GameFragment : Fragment() {
                     binding.tvInitialCount.text = countText
                     binding.tvInitialCountEffect.apply {
                         text = countText
-                        startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.anim_starting_game_count_down))
+                        animationHelper.startAnimation(R.anim.anim_starting_game_count_down, this)
                     }
                 })
         }
@@ -146,11 +129,8 @@ class GameFragment : Fragment() {
     private fun showWordToGuess(value: String) {
         with(binding.tvWordToGuessFront) {
             text = value
-            startAnimation(getRandomWordToGuessInAnimation())
+            animationHelper.startAnimation(wordToGuessInAnimations[(wordToGuessInAnimations.indices).random()], this)
         }
     }
-
-    private fun getRandomWordToGuessInAnimation(): Animation =
-        wordToGuessInAnimations[(wordToGuessInAnimations.indices).random()]
 
 }
