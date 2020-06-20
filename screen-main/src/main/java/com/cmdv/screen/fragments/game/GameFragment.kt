@@ -11,12 +11,17 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.cmdv.core.Constants
+import com.cmdv.core.Constants.Companion.GUEST_RESULT_FAIL
+import com.cmdv.core.Constants.Companion.GUEST_RESULT_SUCCESS
+import com.cmdv.core.GuessSensorImpl
 import com.cmdv.core.helpers.AnimationHelper
+import com.cmdv.core.helpers.showShortToast
 import com.cmdv.domain.model.CategoryModel
 import com.cmdv.screen.R
 import com.cmdv.screen.databinding.FragmentGameBinding
 import com.devs.vectorchildfinder.VectorChildFinder
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_game.*
 
 class GameFragment : Fragment() {
 
@@ -35,6 +40,7 @@ class GameFragment : Fragment() {
         R.anim.anim_word_to_guess_in_8
     )
     private lateinit var animationHelper: AnimationHelper
+    private lateinit var guessSensor: GuessSensorImpl
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,17 +55,22 @@ class GameFragment : Fragment() {
 
         category = Gson().fromJson(args.category, CategoryModel::class.java)
         animationHelper = AnimationHelper(requireActivity())
+        guessSensor = GuessSensorImpl(requireActivity())
 
         setupViewModel()
         initCategoryWords()
         setupBackgroundColors()
         prepareGame()
-
-        binding.btn.setOnClickListener { viewModel.getNewWordToGuess() }
     }
 
     private fun setupViewModel() {
-        this.viewModel = ViewModelProvider(this).get(GameFragmentViewModel()::class.java)
+        this.viewModel =
+            ViewModelProvider(
+                this,
+                GameFragmentViewModelFactory(
+                    GuessSensorImpl(requireActivity())
+                )
+            ).get(GameFragmentViewModel::class.java)
     }
 
     private fun initCategoryWords() {
@@ -119,10 +130,32 @@ class GameFragment : Fragment() {
     }
 
     private fun startGame() {
+        binding.tvInitialCountEffect.visibility = View.GONE
+        binding.tvInitialCount.visibility = View.GONE
+        viewModel.registerListener()
+        viewModel.getGuessResult()
         viewModel.wordToGuess.observe(viewLifecycleOwner, Observer {
             binding.tvWordToGuessBack.text = it
             showWordToGuess(it)
         })
+        getNewWordToGuess()
+        viewModel.guessResult.observe(viewLifecycleOwner, Observer { guessResult ->
+            when (guessResult) {
+                GUEST_RESULT_SUCCESS -> {
+                    showNewWordToGuess()
+                }
+                GUEST_RESULT_FAIL -> {
+                    showNewWordToGuess()
+                }
+                else -> {
+                    binding.tvWordToGuessFront.setTextColor(Color.WHITE)
+                    binding.tvWordToGuessBack.setTextColor(Color.WHITE)
+                }
+            }
+        })
+    }
+
+    private fun getNewWordToGuess() {
         viewModel.getNewWordToGuess()
     }
 
@@ -130,6 +163,23 @@ class GameFragment : Fragment() {
         with(binding.tvWordToGuessFront) {
             text = value
             animationHelper.startAnimation(wordToGuessInAnimations[(wordToGuessInAnimations.indices).random()], this)
+        }
+    }
+
+    private fun showNewWordToGuess() {
+        animationHelper.startAnimation(R.anim.anim_word_to_guess_fade_out, binding.tvWordToGuessFront)
+        with(animationHelper) {
+            with(animationHelper) {
+                startAnimation(R.anim.anim_background_top_open_quick, binding.ivBackgroundTop)
+                startAnimation(R.anim.anim_background_bottom_open_quick, binding.ivBackgroundBottom, ::closeBgr)
+            }
+        }
+    }
+
+    private fun closeBgr() {
+        with(animationHelper) {
+            startAnimation(R.anim.anim_background_top_close_quick, binding.ivBackgroundTop)
+            startAnimation(R.anim.anim_background_bottom_close_quick, binding.ivBackgroundBottom, ::getNewWordToGuess)
         }
     }
 

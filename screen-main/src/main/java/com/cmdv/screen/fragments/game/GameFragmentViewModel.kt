@@ -2,19 +2,26 @@ package com.cmdv.screen.fragments.game
 
 import android.os.CountDownTimer
 import androidx.lifecycle.MutableLiveData
+import com.cmdv.core.GuessSensor
 import com.cmdv.core.base.BaseMVVMViewModel
-import com.cmdv.core.helpers.logInfoMessage
 import com.cmdv.domain.model.CategoryModel
 import java.util.*
 
-class GameFragmentViewModel : BaseMVVMViewModel() {
+class GameFragmentViewModel(private val guessSensor: GuessSensor) : BaseMVVMViewModel() {
     lateinit var category: CategoryModel
+
     private var wordsStack = Stack<CategoryModel.CategoryItemModel>()
+
     var gameStartingCountDownMutableLiveData = MutableLiveData<Int>()
         private set
+
     var gameStartingCountDownFinishedMutableLiveData = MutableLiveData<Int>()
         private set
+
     var wordToGuess = MutableLiveData<String>()
+        private set
+
+    var guessResult = MutableLiveData<Int>()
         private set
 
     fun startGameStartingCountdown() {
@@ -31,10 +38,22 @@ class GameFragmentViewModel : BaseMVVMViewModel() {
         wordsStack.shuffle()
     }
 
+    fun registerListener() {
+        guessSensor.registerListener()
+    }
+
+    fun unregisterListener() {
+        guessSensor.unregisterListener()
+    }
+
     fun getNewWordToGuess() {
         wordToGuess.postValue(
             if (!wordsStack.empty()) wordsStack.pop().value else ""
         )
+    }
+
+    fun getGuessResult() {
+        guessResult = guessSensor.updateGetGuessResultOnlyIfItChanges()
     }
 
     open class CountDown(
@@ -51,12 +70,10 @@ class GameFragmentViewModel : BaseMVVMViewModel() {
             this.startCountingOnMutableLiveData = null
             this.finishCountingOnMutableLiveData?.postValue(-1)
             this.finishCountingOnMutableLiveData = null
-            logInfoMessage("Starting countdown ---> FINISH")
         }
 
         override fun onTick(millisUntilFinished: Long) {
             startCountingOnMutableLiveData?.postValue((millisUntilFinished / 1000).toInt())
-            logInfoMessage("Starting countdown ---> ${(millisUntilFinished / 1000).toInt()}")
         }
 
         inner class Builder(
@@ -73,9 +90,7 @@ class GameFragmentViewModel : BaseMVVMViewModel() {
                 super.finishCountingOnMutableLiveData = finishCountingOnMutableLiveData
                 return this
             }
-
         }
-
     }
 
 }
